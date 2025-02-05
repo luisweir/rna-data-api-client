@@ -1,0 +1,7 @@
+query BookingsReservation($input: BookingsReservationQueryArgumentsType!, $limit: Int){
+  bookingsReservation(input: $input, limit: $limit) @stream {
+    reservationDetails {
+      resvNameid
+    }
+  }
+}

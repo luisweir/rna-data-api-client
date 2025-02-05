@@ -1,0 +1,17 @@
+{
+    "input": {
+      "reservationDetailsResort":{
+          "_in":[
+              "{{hotelId}}"
+          ]
+      },
+      "reservationDetailsTruncBeginDate":{
+          "_gte": "{{dateFrom}}",
+          "_lte":"{{dateTo}}"
+      },
+      "reservationDetailsTruncEndDate":{
+          "_gte":"{{dateFrom}}",
+          "_lte": "{{dateTo}}"
+      }
+    }
+  }

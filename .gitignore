@@ -1,0 +1,13 @@
+.idea/
+.vscode/
+node_modules/
+build/
+dist/
+tmp/
+temp/
+.env*
+*.env
+.npmrc
+package-lock.json
+/event*.json
+/offset.txt

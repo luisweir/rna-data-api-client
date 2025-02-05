@@ -1,0 +1,10 @@
+{
+  "input": {
+    "financialtransDetailsTrxDate": {
+      "_in": ["{{date}}"]
+    },
+    "financialtransDetailsResort": {
+      "_in": ["{{HotelId}}"]
+    }
+  }
+}

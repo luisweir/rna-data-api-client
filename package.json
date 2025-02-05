@@ -1,0 +1,30 @@
+{
+   "name": "streaming-client",
+   "version": "1.0.0",
+   "description": "sample streaming client for OHIP",
+   "exports": "./dist/app.js",
+   "scripts": {
+      "lint": "eslint -c .eslintrc --ext .ts ./src",
+      "lint-fix": "eslint -c .eslintrc --ext .ts ./src --fix ",
+      "postinstall": "npx tsc",
+      "dev": "tsc-watch --onSuccess \"node ./dist/app.js\"",
+      "start": "npx tsc && node --max-old-space-size=8192 ./dist/app.js"
+   },
+   "author": "Luis Weir",
+   "license": "ISC",
+   "dependencies": {
+      "@apollo/client": "^3.12.8",
+      "@types/node": "^18.11.0",
+      "axios": "^1.7.9",
+      "dotenv": "^16.0.3",
+      "npm": "^10.6.0",
+      "tslog": "^3.3.4"
+   },
+   "devDependencies": {
+      "@types/uuid": "8.3.4",
+      "eslint": "^8.25.0",
+      "ts-node": "^10.9.2",
+      "tsc-watch": "^5.0.3",
+      "typescript": "^4.9.5"
+   }
+}
