@@ -1,0 +1,17 @@
+query BookingsReservation($input_RESQ: BookingsReservationQueryArgumentsType!, $limit: Int, $input_INV: InventoryRoomsQueryArgumentsType!){
+  bookingsReservation(input: $input_RESQ, limit: $limit)@stream {
+    reservationDetails {
+      resvNameid
+    }
+  },
+  inventoryRooms(input: $input_INV, limit: $limit) {
+    roomDetails {
+      room
+      roomClass
+      roomClassDescription
+      roomNumber
+      roomStatus
+      roomType
+    }
+  }
+}

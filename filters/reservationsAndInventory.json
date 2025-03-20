@@ -1,5 +1,5 @@
 {
-    "input": {
+    "input_RESQ": {
       "reservationDetailsResort":{
           "_in":[
               "{{hotelId}}"
@@ -12,6 +12,11 @@
       "reservationDetailsTruncEndDate":{
           "_gte":"{{dateFrom}}",
           "_lte": "{{dateTo}}"
+      }
+    },
+    "input_INV": {
+      "roomDetailsResort": {
+        "_eq": "{{hotelId}}"
       }
     },
     "limit": {{limit}}

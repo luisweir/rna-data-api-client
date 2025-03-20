@@ -127,6 +127,6 @@ export class DataClient {
             body: JSON.stringify({ query: typeof query === 'object' && 'loc' in query ? query.loc.source.body : query, variables: vars || {} })
         };
         log.info('Executing request/stream HTTP call');
-        return this.callInstance.fetchStreamingData(this.gqlUrl, options, this.env.EXCLUDE_NULL, processChunk);
+        return this.callInstance.fetchStreamingData(this.gqlUrl, options, this.env.EXCLUDE_NULL, processChunk, {fileName: this.env.QUERY_NAME, outDir: './data'});
     }
 }

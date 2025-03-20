@@ -45,7 +45,7 @@ export class Call {
         return obj;
     }
 
-    public async fetchStreamingData(url: string, options: any, excludeNull?: boolean, processChunk?: (chunk: any) => void): Promise<any[][]> {
+    public async fetchStreamingData(url: string, options: any, excludeNull?: boolean, processChunk?: (chunk: any, config: any) => void, processConfig?: any): Promise<any[][]> {
         try {
             const response = await fetch(url, options);
             if (!response.ok) {
@@ -105,7 +105,7 @@ export class Call {
                         log.silly(json);
 
                         if (processChunk) {
-                            processChunk(json);
+                            processChunk(json, processConfig);
                         }
                     } catch (err) {
                         log.error("Error parsing JSON chunk:", err);

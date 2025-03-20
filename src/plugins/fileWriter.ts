@@ -2,19 +2,17 @@ import fs from 'fs';
 import path from 'path';
 import { log } from '../logger';
 
-const OUTPUT_DIR = './data';
-const FILE_PREFIX = 'profileItem';
 let fileCounter = 1;
 
-const processChunk = (chunk: any) => {
+const processChunk = (chunk: any, config: any) => {
     try {
-        if (!fs.existsSync(OUTPUT_DIR)) {
-            fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+        if (!fs.existsSync(config.outDir)) {
+            fs.mkdirSync(config.outDir, { recursive: true });
         }
         
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-        const fileName = `${FILE_PREFIX}.${String(fileCounter).padStart(2, '0')}.${timestamp}.json`;
-        const filePath = path.join(OUTPUT_DIR, fileName);
+        const fileName = `${config.fileName}.${String(fileCounter).padStart(2, '0')}.${timestamp}.json`;
+        const filePath = path.join(config.outDir, fileName);
         
         fs.writeFileSync(filePath, JSON.stringify(chunk, null, 2), 'utf8');
         log.debug(`Saved: ${filePath}`);

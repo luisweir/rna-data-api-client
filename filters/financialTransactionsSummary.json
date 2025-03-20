@@ -1,0 +1,10 @@
+{
+  "input": {
+    "trialbalanceDetailsTrxDate": {
+      "_eq": "{{dateFrom}}"
+    },
+    "trialbalanceDetailsResort": {
+      "_eq": "{{dateTo}}"
+    }
+  }
+}
