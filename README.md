@@ -12,6 +12,11 @@ Sample GraphQL data fetching client for retrieving and processing structured pro
   - [Installation 🛠](#installation-)
   - [Configuration ⚙️](#configuration-️)
   - [Run ▶️](#run-️)
+  - [Plugin Authoring 🔌](#plugin-authoring-)
+  - [GraphQL Details ✏️](#graphql-details-️)
+  - [Advanced Configuration ⚙️](#advanced-configuration-️)
+  - [Troubleshooting \& Logs 🐞](#troubleshooting--logs-)
+  - [Contributing \& Support 🤝](#contributing--support-)
   - [License 📜](#license-)
   - [Disclaimer ⚠️](#disclaimer-️)
 
@@ -115,12 +120,95 @@ Once all required environment variables are set, the project can be executed wit
 npm start
 ```
 
-To run in development mode:
+ To run in development mode:
 
-```bash
-npm run dev
+ ```bash
+ npm run dev
+ ```
+
+## Plugin Authoring 🔌
+
+You can extend or customize how streamed GraphQL chunks are processed by dropping your own plugin modules under `src/plugins/`. Each plugin module should export a default function named `processChunk` with this signature:
+
+```ts
+// src/plugins/myPlugin.ts
+export default function processChunk(
+  chunk: any,
+  config: { fileName: string; outDir: string; [key: string]: any }
+): void {
+  // your processing logic here
+}
 ```
 
+- `chunk` is the parsed JSON for each incremental payload  
+- `config.fileName` is the base name of the query being executed  
+- `config.outDir` is the directory where plugins typically write output  
+- You can add additional keys to `config` as needed
+
+To enable your plugin, set `PLUGIN_NAME` to the module filename (without extension). Example:
+
+```bash
+PLUGIN_NAME=myCustomPlugin
+```
+
+## GraphQL Details ✏️
+
+Queries live in `queries/*.gql` and must be valid GraphQL operations. The client supports two modes:
+
+1. Standard request/response  
+   - Any query without the `@stream` directive will be sent via ApolloClient and return a complete response object.
+2. Streaming mode  
+   - Annotate a list field in your query with `@stream` (and optional args like `initialCount`).  
+   - Example:
+
+    ```graphql
+    query ListProfiles {
+      profileIndividuals @stream(initialCount: 50) {
+        id
+        name {
+          given
+          family
+        }
+      }
+    }
+    ```
+   - Chunks are processed as they arrive, passed to your `processChunk` plugin.
+
+Filters are JSON templates with placeholder syntax `{{variableName}}`. These are replaced at runtime based on the `FILTER_VARS` env var (e.g. `hotelId:HOTEL123,limit:100`).
+
+## Advanced Configuration ⚙️
+
+Beyond the core env vars, you can override:
+
+- `OAUTH_ENDPOINT` – Path for token fetch (default `/oauth/v1/tokens`)
+- `DATA_ENDPOINT`  – Path for GraphQL API (default `/rna/v1/graphql`)
+- `TOKEN_EXPIRY`   – Milliseconds before the client refreshes the OAuth token
+- `QUERY_FOLDER`, `FILTER_FOLDER`, `PLUGIN_FOLDER` – Paths to custom folders
+- `ENVPATH`        – Path to your env file if not `.env`
+
+## Troubleshooting & Logs 🐞
+
+- Increase verbosity via `LOGLEVEL` (`trace` or `silly`) to see HTTP requests and chunk parsing.
+- Common errors:
+  - **Missing env vars**: The client will throw if `QUERY_NAME` or `FILTER_NAME` isn’t set.
+  - **Variable replacement**: You’ll see an error if any `{{…}}` placeholder isn’t provided in `FILTER_VARS`.
+  - **Authentication failures**: Invalid credentials return 401/403; check `CLIENT_ID`, `CLIENT_SECRET`, and `APP_KEY`.
+  - **Network timeouts**: Increase `TOKEN_EXPIRY` or adjust timeouts in `Call.ts` if needed.
+
+Logs are printed to stdout; make sure your console or container captures them.
+
+## Contributing & Support 🤝
+
+Contributions are welcome! To get involved:
+
+- Fork the repo and create branches against `main`.
+- Open issues for bugs or feature requests.
+- Submit PRs with clear descriptions and minimal focused changes.
+- Run `npm install`, then:
+  - `npm run lint` to check code style.
+  - `npm run dev` to test in watch mode.
+
+Please adhere to existing TypeScript conventions and update this README for any new features you add.
 ## License 📜
 
 This project is available under the [Universal Permissive License v 1.0](https://oss.oracle.com/licenses/upl).

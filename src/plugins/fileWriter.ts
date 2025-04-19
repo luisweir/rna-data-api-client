@@ -4,7 +4,7 @@ import { log } from '../logger';
 
 let fileCounter = 1;
 
-const processChunk = (chunk: any, config: any) => {
+const processChunk = (chunk: any, config: { fileName: string; outDir: string; [key: string]: any }): void => {
     try {
         if (!fs.existsSync(config.outDir)) {
             fs.mkdirSync(config.outDir, { recursive: true });
